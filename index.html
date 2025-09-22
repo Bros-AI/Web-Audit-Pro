@@ -1,176 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Auditor Pro - Full SEO & Performance Suite</title>
+    <title>Network Monitor Pro - Surveillance de Sites Web</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        <header class="header">
-            <h1>Web Auditor Pro</h1>
-            <p>The All-in-One Tool to Crawl, Analyze, and Optimize Any Website.</p>
-        </header>
-
-        <main class="main-content">
-            <section class="audit-input-section card">
-                <h2>Enter a URL to Begin Your Full Audit</h2>
-                <div class="input-group">
-                    <i class="fas fa-link icon"></i>
-                    <input type="url" id="url-input" placeholder="https://example.com" required>
-                    <button id="audit-btn" class="btn btn-primary">Audit Now</button>
-                </div>
-                <div id="error-message" class="error-message" role="alert"></div>
-            </section>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-network-wired"></i>
+                <span class="logo-text">NetworkMonitor Pro</span>
+            </div>
             
-            <section class="audit-results-section" id="audit-results-section" style="display: none;">
-                <div class="tabs">
-                    <button class="tab active" data-tab="overview">Overview</button>
-                    <button class="tab" data-tab="assets">Assets</button>
-                    <button class="tab" data-tab="seo">SEO & Tech</button>
-                    <button class="tab" data-tab="crawler">Crawler</button>
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Tableau de bord</span>
+                </a>
+                <a href="#" class="nav-link" data-section="network-view">
+                    <i class="fas fa-table"></i>
+                    <span class="nav-text">État du réseau</span>
+                </a>
+                <a href="#" class="nav-link" data-section="detailed-view">
+                    <i class="fas fa-list-alt"></i>
+                    <span class="nav-text">Vue détaillée</span>
+                </a>
+                <a href="#" class="nav-link" data-section="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="nav-text">Analytique</span>
+                </a>
+                <a href="#" class="nav-link" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-text">Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="btn btn-outline btn-icon" id="toggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="header-title">Network Monitor Pro</h1>
                 </div>
-
-                <!-- Overview Tab -->
-                <div class="tab-content active" id="overview-tab">
-                    <div class="page-snapshot-card" id="page-snapshot-card">
-                        <div class="snapshot-image" id="snapshot-image"></div>
-                        <div class="snapshot-info">
-                            <h3 id="snapshot-title">Page Title</h3>
-                            <p id="snapshot-description">Meta description of the page.</p>
-                            <span class="snapshot-url" id="snapshot-url">https://example.com</span>
-                        </div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-value" id="total-assets-count">0</span>
-                            <span class="stat-label">Total Assets</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="total-page-size">N/A</span>
-                            <span class="stat-label">Page Size (HTML)</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="total-asset-size">N/A</span>
-                            <span class="stat-label">Total Asset Size</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="image-count">0</span>
-                            <span class="stat-label">Images</span>
-                        </div>
-                         <div class="stat-item">
-                            <span class="stat-value" id="video-count">0</span>
-                            <span class="stat-label">Videos</span>
-                        </div>
-                    </div>
+                
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher sites, tags, ou domaines..." id="searchInput">
                 </div>
-
-                <!-- Assets Tab -->
-                <div class="tab-content" id="assets-tab">
-                    <h3 class="mt-4">Images (<span id="image-count-tab">0</span>)</h3>
-                    <div class="asset-section-header">
-                        <p class="subtitle">All discovered image assets on the page.</p>
-                        <div class="select-all-wrapper">
-                            <label><input type="checkbox" id="select-all-images"> Select All Images</label>
-                        </div>
-                    </div>
-                    <div class="asset-grid" id="image-grid">
-                        <p class="empty-state">No images found.</p>
-                    </div>
-
-                    <h3 class="mt-4">Videos (<span id="video-count-tab">0</span>)</h3>
-                    <div class="asset-section-header">
-                         <p class="subtitle">All discovered video assets on the page.</p>
-                         <div class="select-all-wrapper">
-                            <label><input type="checkbox" id="select-all-videos"> Select All Videos</label>
-                        </div>
-                    </div>
-                    <div class="asset-grid" id="video-grid">
-                        <p class="empty-state">No videos found.</p>
-                    </div>
+                
+                <div class="d-flex gap-1">
+                    <button class="btn btn-success" id="csvImportBtn">
+                        <i class="fas fa-file-csv"></i>
+                        <span style="margin-left: 0.5rem;">Importer</span>
+                    </button>
+                    <button class="btn btn-primary" id="addWebsiteBtn">
+                        <i class="fas fa-plus"></i>
+                        <span style="margin-left: 0.5rem;">Ajouter un site</span>
+                    </button>
+                    <button class="btn btn-outline" id="checkAllBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span style="margin-left: 0.5rem;">Tout vérifier</span>
+                    </button>
                 </div>
+            </header>
 
-                <!-- SEO & Tech Tab -->
-                <div class="tab-content" id="seo-tab">
-                    <div class="seo-grid">
-                        <div class="seo-card">
-                            <h4>Social Media Links</h4>
-                            <ul class="seo-list" id="social-links-list"><li>No social media links found.</li></ul>
-                        </div>
-                        <div class="seo-card">
-                            <h4>Sitemap Status</h4>
-                            <div class="seo-status" id="sitemap-status"><span class="status-badge error">sitemap.xml not found</span></div>
-                            <ul class="seo-list" id="sitemap-list"></ul>
-                        </div>
-                        <div class="seo-card full-width">
-                            <h4>robots.txt Content</h4>
-                            <pre class="seo-pre" id="robots-content">robots.txt not found or failed to load.</pre>
-                        </div>
+            <!-- Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalWebsites">0</div>
+                        <div class="stat-label">Sites web totaux</div>
                     </div>
                 </div>
-
-                <!-- Crawler Tab -->
-                <div class="tab-content" id="crawler-tab">
-                    <h4>Internal Links Discovered</h4>
-                    <p class="subtitle">Links pointing to the same domain. Click 'Audit' to crawl a new page.</p>
-                    <ul class="crawler-list" id="internal-links-list">
-                        <li>No internal links found.</li>
-                    </ul>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--success), #16a34a);"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="onlineWebsites">0</div>
+                        <div class="stat-label">En ligne & Valides</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning), #ea580c);"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="issueWebsites">0</div>
+                        <div class="stat-label">Problèmes détectés</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, var(--info), #0ea5e9);"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="averageAvailability">0%</div>
+                        <div class="stat-label">Disponibilité moyenne</div>
+                    </div>
                 </div>
             </section>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="network-status">Matrice d'état du réseau</div>
+                <div class="tab" data-tab="detailed-view">Vue détaillée des sites</div>
+                <div class="tab" data-tab="analytics">Analytique & Rapports</div>
+                <div class="tab" data-tab="settings">Paramètres</div>
+            </div>
+
+            <!-- Main Tab Content Area -->
+            <div id="main-content-area">
+                <!-- Tab content will be dynamically rendered here by ui.js -->
+            </div>
         </main>
-        
-        <footer class="app-footer">
-            <a href="https://bros.ai" target="_blank" rel="noopener noreferrer" class="made-with-love">Made with <span class="heart" aria-label="love">❤️</span> by Bros AI</a>
-        </footer>
     </div>
 
-    <div class="bulk-action-bar" id="bulk-action-bar">
-        <span id="bulk-selection-count">0 assets selected</span>
-        <button id="bulk-optimize-btn" class="btn btn-primary btn-sm">Optimize & Download</button>
-    </div>
+    <!-- Modals and Notifications -->
+    <div class="notification-container" id="notificationContainer"></div>
+    <!-- Modals will be dynamically created by ui.js -->
 
-    <div class="modal-backdrop" id="optimizer-modal">
-         <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="optimizer-title">Bulk Optimizer</h3>
-                <button class="modal-close" id="close-optimizer-modal"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="optimizer-body">
-                <!-- Optimizer content will be injected here by script.js -->
-            </div>
-        </div>
-    </div>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></button>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
-    <div class="modal-backdrop" id="manual-input-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Manual HTML Input</h3>
-                <button class="modal-close" id="close-manual-modal"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <p>Automated fetching failed. You can bypass this by pasting the page's source code directly.</p>
-                <ol class="instructions">
-                    <li>Go to the target website in a new tab.</li>
-                    <li>Right-click anywhere on the page and select "View Page Source".</li>
-                    <li>Copy everything (Ctrl+A, Ctrl+C) and paste it below.</li>
-                </ol>
-                <textarea id="manual-html-input" placeholder="Paste full HTML source code here..."></textarea>
-            </div>
-            <div class="modal-footer">
-                 <button id="analyze-manual-html-btn" class="btn btn-primary">Analyze Source Code</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="loading-overlay" id="loading-overlay"><div class="spinner"></div><p id="loading-text"></p></div>
-
-    <script src="script.js"></script>
+    <!-- ======================================================== -->
+    <!--                  CORRECTED SCRIPT ORDER                  -->
+    <!-- ======================================================== -->
+    
+    <!-- 1. Load the main script FIRST to define the NetworkMonitor object -->
+    <script src="js/main.js" defer></script>
+    
+    <!-- 2. Load all other modules that ADD to the NetworkMonitor object -->
+    <script src="js/api.js" defer></script>
+    <script src="js/ai.js" defer></script> 
+    <script src="js/utils.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/websiteManager.js" defer></script>
+    <script src="js/checker.js" defer></script>
+    <script src="js/importExport.js" defer></script>
+    <script src="js/analytics.js" defer></script>
 </body>
 </html>
